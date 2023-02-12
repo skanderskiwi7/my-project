@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { deleteCar } from "../api/network";
+import Profile from "../pages/profile/Profile";
+
 function CarCards({ data, fetchData }) {
-  console.log(data);
+  const [isShowDelete, setIsShowDelete] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname == "/profile");
+    if (location.pathname === "/profile") {
+      setIsShowDelete(true);
+    } else {
+      setIsShowDelete(false);
+    }
+  }, [location.pathname]);
 
   return (
     <div className="">
@@ -30,16 +43,19 @@ function CarCards({ data, fetchData }) {
               <span>{data.color}</span>
             </div>
           </div>
-
-          <button
-            className="bot-del"
-            onClick={() => {
-              deleteCar(data._id);
-              window.location.reload(false);
-            }}
-          >
-            delete
-          </button>
+          {isShowDelete ? (
+            <button
+              className="bot-del"
+              onClick={() => {
+                deleteCar(data._id);
+                window.location.reload(false);
+              }}
+            >
+              delete
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>
